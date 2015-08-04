@@ -8,6 +8,7 @@ class sqlToJson {
 
 	var $sqlList;
 	var $mysqli;
+	var $varList;
 
 	function sqlToJson (){
 		$this->sqlList = array();
@@ -18,11 +19,19 @@ class sqlToJson {
 		$this->sqlList[$store] = $sql;
 	}
 
+	function addVar($key,$value){
+		$this->varList[$key] = $value; 
+	}
+	
 	function get(){
 		$json = "";
 		foreach ($this->sqlList as $store => $sql) {
 			$json .= ($json == "") ? "" : ",";
 			$json .= $this->getStoreJson($store,$sql);
+		}
+		foreach ($this->varList as $key => $value) {
+			$json .= ($json == "") ? "" : ",";
+			$json .= '"'.$key.'":"'.$value.'"';
 		}
 		echo "{".$json."}";
 	}
